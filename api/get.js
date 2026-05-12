@@ -1,7 +1,7 @@
-import { json, parseTelegramUpdate, telegram } from './_telegram.js';
+import { parseTelegramUpdate, sendJson, telegram } from './_telegram.js';
 
-export default async function handler(request) {
-  if (request.method !== 'GET') return json({ error: 'Method not allowed.' }, 405);
+export default async function handler(request, response) {
+  if (request.method !== 'GET') return sendJson(response, { error: 'Method not allowed.' }, 405);
 
   try {
     const updates = await telegram('getUpdates', null, '?limit=100');
@@ -10,8 +10,8 @@ export default async function handler(request) {
       .filter(Boolean)
       .sort((left, right) => new Date(left.createdAt || 0) - new Date(right.createdAt || 0));
 
-    return json(messages);
+    return sendJson(response, messages);
   } catch (error) {
-    return json({ error: error.message || 'Gagal memuat pesan.' }, 500);
+    return sendJson(response, { error: error.message || 'Gagal memuat pesan.' }, 500);
   }
 }

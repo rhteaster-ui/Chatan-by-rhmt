@@ -1,6 +1,6 @@
 # R_HMT OFC Chat Channel
 
-Aplikasi chat channel glassmorphism berbasis React, Vite, Tailwind CSS, dan Vercel Serverless Functions. Backend memakai Telegram Bot API sebagai jalur penyimpanan/penarikan pesan melalui grup privat.
+Aplikasi chat channel glassmorphism berbasis React, Vite, Tailwind CSS, dan Vercel Node Serverless Functions. Backend memakai Telegram Bot API sebagai jalur penyimpanan/penarikan pesan melalui grup privat.
 
 ## Fitur
 
@@ -37,6 +37,17 @@ Ubah `VITE_SESSION_STATUS` menjadi `CLOSED`, lalu redeploy untuk menutup sesi ch
    - `#PRIVATE Dari: [Nama] - [Isi Pesan]`
 
 > Catatan: endpoint `/api/get` dan `/api/admin-log` memakai `getUpdates`, sehingga bot harus dapat menerima update dari grup Telegram terkait.
+
+## Kesiapan Deploy Vercel
+
+Project ini disiapkan untuk deploy di Vercel dengan struktur root standar:
+
+- Frontend Vite berada di `src/` dan entry HTML di `index.html`.
+- Serverless Functions berada di folder `api/` dan memakai signature Node Vercel `handler(request, response)`.
+- Build command: `npm run build`.
+- Output directory: `dist`.
+
+Pastikan semua environment variables sudah diisi sebelum deploy production.
 
 ## Development
 

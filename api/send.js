@@ -1,14 +1,14 @@
-import { ensureTelegramConfig, json, readJson, telegram, validateMessage } from './_telegram.js';
+import { ensureTelegramConfig, readJson, sendJson, telegram, validateMessage } from './_telegram.js';
 
-export default async function handler(request) {
-  if (request.method !== 'POST') return json({ error: 'Method not allowed.' }, 405);
+export default async function handler(request, response) {
+  if (request.method !== 'POST') return sendJson(response, { error: 'Method not allowed.' }, 405);
 
   try {
     const { chatId } = ensureTelegramConfig();
-    const payload = await readJson(request);
+    const payload = readJson(request);
     const visibility = String(payload.visibility || '').toUpperCase();
     const validationError = validateMessage({ ...payload, visibility });
-    if (validationError) return json({ error: validationError }, 400);
+    if (validationError) return sendJson(response, { error: validationError }, 400);
 
     const label = visibility === 'PRIVATE' ? '#PRIVATE' : '#PUBLIC';
     const sender = String(payload.sender).trim();
@@ -20,8 +20,8 @@ export default async function handler(request) {
       disable_web_page_preview: false,
     });
 
-    return json({ ok: true });
+    return sendJson(response, { ok: true });
   } catch (error) {
-    return json({ error: error.message || 'Gagal mengirim pesan.' }, 500);
+    return sendJson(response, { error: error.message || 'Gagal mengirim pesan.' }, 500);
   }
 }

@@ -1,16 +1,15 @@
 const publicPattern = /^#PUBLIC\s+Dari:\s+(.+?)\s+-\s+([\s\S]*)$/i;
 const privatePattern = /^#PRIVATE\s+Dari:\s+(.+?)\s+-\s+([\s\S]*)$/i;
 
-export function json(response, status = 200) {
-  return new Response(JSON.stringify(response), {
-    status,
-    headers: { 'content-type': 'application/json; charset=utf-8' },
-  });
+export function sendJson(response, body, status = 200) {
+  response.status(status).json(body);
 }
 
-export async function readJson(request) {
+export function readJson(request) {
+  if (!request.body) return {};
+  if (typeof request.body === 'object') return request.body;
   try {
-    return await request.json();
+    return JSON.parse(request.body);
   } catch {
     return {};
   }
